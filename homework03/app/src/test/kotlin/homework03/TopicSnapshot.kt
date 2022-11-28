@@ -6,3 +6,4 @@ class TopicSnapshot {
     val rangSize: Int = 0
     val description: String = ""
 }
+// TODO: you need to understand where you may get this data
