@@ -20,6 +20,9 @@ repositories {
 }
 
 dependencies {
+    // JSON
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.7.1")
+
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 
