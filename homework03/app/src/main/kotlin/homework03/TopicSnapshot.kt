@@ -1,8 +1,6 @@
 package homework03
 
-import com.fasterxml.jackson.core.JsonParser
 import java.net.URL
-import java.net.URLConnection
 
 data class TopicSnapshot (
     val timeCreate: Int,
@@ -18,13 +16,11 @@ suspend fun getTopic(name: String): TopicSnapshot {
 fun getJSON(name: String): String {
     val url = URL("https://www.reddit.com/r/Kotlin/about.json")
     var result: String = ""
-    var i = 0
     do {
-        print(i++)
         try {
             result = url.readText()
         } catch (error: Exception) {
-            print("noo")
+            println("Unsuccess try to get json")
         }
     } while (result.isEmpty())
     return result
