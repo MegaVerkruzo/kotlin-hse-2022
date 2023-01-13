@@ -111,7 +111,7 @@ class DefaultNDArray private constructor(private val shape: Shape, private val d
 
     private fun getByIndexOrNull(index: Int): Int? = data.getOrNull(index)
 
-    private fun setByIndexOrNothing(index: Int, value: Int) {
+    private fun addByIndexOrNothing(index: Int, value: Int) {
         if (index !in (0 until size)) return
         data[index] += value
     }
@@ -177,7 +177,7 @@ class DefaultNDArray private constructor(private val shape: Shape, private val d
             for (j in (0 until countTables)) {
                 for (k in (0 until countK)) {
                     val indexOfNewTable: Int = i * countTables + j
-                    result.setByIndexOrNothing(indexOfNewTable,
+                    result.addByIndexOrNothing(indexOfNewTable,
                         (result.getByIndexOrNull(indexOfNewTable) ?: 0)
                                 + data[i * countK + k] * ((other as DefaultNDArray).getByIndexOrNull(j + i * countTables) ?: 0)
                     )
