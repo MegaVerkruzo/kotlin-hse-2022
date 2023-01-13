@@ -98,10 +98,8 @@ class DefaultNDArray private constructor(private val shape: Shape, private val d
                 shape.dim(it)
             )
         }
-        return findIndexInDataOrNull(point)
-    }
 
-    private fun findIndexInDataOrNull(point: Point): Int {
+        // findIndexInDataOrNull: Int
         var indexInData = 0
         var sizeWithPreviousDimensions = 1
         (0 until ndim).forEach { index ->
