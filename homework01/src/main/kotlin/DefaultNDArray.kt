@@ -116,6 +116,8 @@ class DefaultNDArray private constructor(private val shape: Shape, private val d
         data[index] += value
     }
 
+    private fun getIntOrZero(elem: Int?) = elem ?: 0
+
     override fun at(point: Point): Int = data[findIndexInData(point)]
 
     override fun set(point: Point, value: Int) {
@@ -152,11 +154,12 @@ class DefaultNDArray private constructor(private val shape: Shape, private val d
             }
         } else {
             (0 until size).forEach {
-                data[it] += (other as DefaultNDArray).getByIndexOrNull(it) ?: throw NDArrayException.IllegalOperationShapeSizeException(
-                    Operation.ADD,
-                    ndim,
-                    other.ndim
-                )
+                data[it] += (other as DefaultNDArray).getByIndexOrNull(it)
+                    ?: throw NDArrayException.IllegalOperationShapeSizeException(
+                        Operation.ADD,
+                        ndim,
+                        other.ndim
+                    )
             }
         }
     }
@@ -175,9 +178,10 @@ class DefaultNDArray private constructor(private val shape: Shape, private val d
             for (j in (0 until countTables)) {
                 for (k in (0 until countK)) {
                     val indexOfNewTable: Int = i * countTables + j
-                    result.addByIndexOrNothing(indexOfNewTable,
-                        (result.getByIndexOrNull(indexOfNewTable) ?: 0)
-                                + data[i * countK + k] * ((other as DefaultNDArray).getByIndexOrNull(j + i * countTables) ?: 0)
+                    result.addByIndexOrNothing(
+                        indexOfNewTable,
+                        getIntOrZero(result.getByIndexOrNull(indexOfNewTable))
+                                + data[i * countK + k] * getIntOrZero((other as DefaultNDArray).getByIndexOrNull(j + i * countTables))
                     )
                 }
             }
