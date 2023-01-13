@@ -1,11 +1,4 @@
 interface NDArray : SizeAware, DimensionAware {
-    fun findIndexInData(point: Point): Int
-
-    fun findIndexInDataOrNull(point: Point): Int?
-
-    fun getByIndexOrNull(index: Int): Int?
-
-    fun setByIndexOrNothing(index: Int, value: Int)
 
     /*
      * Получаем значение по индексу point
@@ -96,7 +89,7 @@ class DefaultNDArray private constructor(val shape: Shape, val data: IntArray) :
     override val ndim: Int
         get() = shape.ndim
 
-    override fun findIndexInData(point: Point): Int {
+    private fun findIndexInData(point: Point): Int {
         if (point.ndim != ndim) throw NDArrayException.IllegalPointDimensionException(point.ndim, ndim)
         (0 until point.ndim).forEach {
             if (point.dim(it) !in 0 until shape.dim(it)) throw NDArrayException.IllegalPointCoordinateException(
@@ -108,7 +101,7 @@ class DefaultNDArray private constructor(val shape: Shape, val data: IntArray) :
         return findIndexInDataOrNull(point)
     }
 
-    override fun findIndexInDataOrNull(point: Point): Int {
+    private fun findIndexInDataOrNull(point: Point): Int {
         var indexInData: Int = 0
         var sizeWithPreviousDimensions: Int = 1
         (0 until ndim).forEach { index ->
@@ -118,9 +111,9 @@ class DefaultNDArray private constructor(val shape: Shape, val data: IntArray) :
         return indexInData
     }
 
-    override fun getByIndexOrNull(index: Int): Int? = data.getOrNull(index)
+    private fun getByIndexOrNull(index: Int): Int? = data.getOrNull(index)
 
-    override fun setByIndexOrNothing(index: Int, value: Int) {
+    private fun setByIndexOrNothing(index: Int, value: Int) {
         if (index !in (0 until size)) return
         data[index] += value
     }
@@ -153,7 +146,7 @@ class DefaultNDArray private constructor(val shape: Shape, val data: IntArray) :
             (0 until shape.dim(ndim - 1)).forEach { indexOfLastDimension ->
                 (0 until sizeWithoutLastDimension).forEach { indexOfFirstDimensions ->
                     data[indexOfLastDimension * sizeWithoutLastDimension + indexOfFirstDimensions] +=
-                        other.getByIndexOrNull(indexOfFirstDimensions)
+                        (other as DefaultNDArray).getByIndexOrNull(indexOfFirstDimensions)
                             ?: throw NDArrayException.IllegalOperationShapeSizeException(
                                 Operation.ADD,
                                 ndim,
@@ -161,17 +154,19 @@ class DefaultNDArray private constructor(val shape: Shape, val data: IntArray) :
                             )
                 }
             }
-        }
-        (0 until size).forEach {
-            data[it] += other.getByIndexOrNull(it) ?: throw NDArrayException.IllegalOperationShapeSizeException(
-                Operation.ADD,
-                ndim,
-                other.ndim
-            )
+        } else {
+            (0 until size).forEach {
+                data[it] += (other as DefaultNDArray).getByIndexOrNull(it) ?: throw NDArrayException.IllegalOperationShapeSizeException(
+                    Operation.ADD,
+                    ndim,
+                    other.ndim
+                )
+            }
         }
     }
 
     override fun dot(other: NDArray): NDArray {
+        // Checking that tables has correct sizes
         if (!(ndim == 2 && other.ndim <= 2 && shape.dim(1) == other.dim(0))) throw NDArrayException.IllegalOperationShapeSizeException(
             Operation.DOT,
             ndim,
@@ -184,9 +179,9 @@ class DefaultNDArray private constructor(val shape: Shape, val data: IntArray) :
             for (j in (0 until countTables)) {
                 for (k in (0 until countK)) {
                     val indexOfNewTable: Int = i * countTables + j
-                    result.setByIndexOrNothing(indexOfNewTable,
-                        (result.getByIndexOrNull(indexOfNewTable) ?: 0)
-                                + data[i * countK + k] * (other.getByIndexOrNull(j + i * countTables) ?: 0)
+                    (result as DefaultNDArray).setByIndexOrNothing(indexOfNewTable,
+                        ((result as DefaultNDArray).getByIndexOrNull(indexOfNewTable) ?: 0)
+                                + data[i * countK + k] * ((other as DefaultNDArray).getByIndexOrNull(j + i * countTables) ?: 0)
                     )
                 }
             }
