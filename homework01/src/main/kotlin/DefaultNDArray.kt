@@ -31,12 +31,12 @@ interface NDArray : SizeAware, DimensionAware {
     /*
      * Создаем view для текущего NDArray
      *
-     * Ожидается, что будет создан новая реализация  интерфейса.
+     * Ожидается, что будет создан новая реализация интерфейса.
      * Но она не должна быть видна в коде, использующем эту библиотеку как внешний артефакт
      *
      * Должна быть возможность делать view над view.
      *
-     * In-place-изменения над view любого порядка видна в оригнале и во всех view
+     * In-place-изменения над view любого порядка видна в оригинале и во всех view
      *
      * Проблемы thread-safety игнорируем
      */
@@ -66,7 +66,7 @@ interface NDArray : SizeAware, DimensionAware {
      *
      * Требования к размерности - как для умножения матриц.
      *
-     * this - обязательно двумерна
+     * This - обязательно двумерная
      *
      * other - может быть двумерной, с подходящей размерностью, равной 1 или просто вектором
      *
@@ -102,8 +102,8 @@ class DefaultNDArray private constructor(private val shape: Shape, private val d
     }
 
     private fun findIndexInDataOrNull(point: Point): Int {
-        var indexInData: Int = 0
-        var sizeWithPreviousDimensions: Int = 1
+        var indexInData = 0
+        var sizeWithPreviousDimensions = 1
         (0 until ndim).forEach { index ->
             indexInData += point.dim(index) * sizeWithPreviousDimensions
             sizeWithPreviousDimensions *= shape.dim(index)
@@ -174,13 +174,13 @@ class DefaultNDArray private constructor(private val shape: Shape, private val d
         )
         val countTables: Int = if (other.ndim >= 2) other.dim(1) else 1
         val countK: Int = shape.dim(1)
-        val result: NDArray = DefaultNDArray.zeros(DefaultShape(shape.dim(0), countTables))
+        val result: DefaultNDArray = zeros(DefaultShape(shape.dim(0), countTables))
         for (i in (0 until shape.dim(0))) {
             for (j in (0 until countTables)) {
                 for (k in (0 until countK)) {
                     val indexOfNewTable: Int = i * countTables + j
-                    (result as DefaultNDArray).setByIndexOrNothing(indexOfNewTable,
-                        ((result as DefaultNDArray).getByIndexOrNull(indexOfNewTable) ?: 0)
+                    result.setByIndexOrNothing(indexOfNewTable,
+                        (result.getByIndexOrNull(indexOfNewTable) ?: 0)
                                 + data[i * countK + k] * ((other as DefaultNDArray).getByIndexOrNull(j + i * countTables) ?: 0)
                     )
                 }
