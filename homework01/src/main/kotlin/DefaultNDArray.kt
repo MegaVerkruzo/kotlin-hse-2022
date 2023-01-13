@@ -83,7 +83,7 @@ interface NDArray : SizeAware, DimensionAware {
  *
  * Инициализация - через factory-методы ones(shape: Shape), zeros(shape: Shape) и метод copy
  */
-class DefaultNDArray private constructor(val shape: Shape, val data: IntArray) : NDArray {
+class DefaultNDArray private constructor(private val shape: Shape, private val data: IntArray) : NDArray {
     override val size: Int
         get() = shape.size
     override val ndim: Int
