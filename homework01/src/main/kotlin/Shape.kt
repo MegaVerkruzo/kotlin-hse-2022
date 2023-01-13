@@ -17,14 +17,12 @@ class DefaultShape(private vararg val dimensions: Int) : Shape {
     override val ndim: Int
         get() = dimensions.size
 
-    override var size: Int = 0
+    override var size: Int = dimensions.reduce { accumulator, element ->
+        accumulator * element
+    }
 
     init {
         if (dimensions.isEmpty()) throw ShapeArgumentException.EmptyShapeException()
-
-        size = dimensions.reduce { accumulator, element ->
-            accumulator * element
-        }
 
         val firstIncorrectIndex = dimensions.indexOfFirst { it <= 0 }
         if (firstIncorrectIndex != -1) throw ShapeArgumentException.NonPositiveDimensionException(
@@ -33,7 +31,8 @@ class DefaultShape(private vararg val dimensions: Int) : Shape {
         )
     }
 
-    override fun dim(i: Int): Int = dimensions.getOrNull(i) ?: throw ShapeArgumentException.NonPositiveDimensionException(i, null)
+    override fun dim(i: Int): Int =
+        dimensions.getOrNull(i) ?: throw ShapeArgumentException.NonPositiveDimensionException(i, null)
 }
 
 sealed class ShapeArgumentException(reason: String = "") : IllegalArgumentException(reason) {
