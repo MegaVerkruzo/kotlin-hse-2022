@@ -173,15 +173,15 @@ class DefaultNDArray private constructor(private val shape: Shape, private val d
         )
         val countTables: Int = if (other.ndim >= 2) other.dim(1) else 1
         val countK: Int = shape.dim(1)
-        val result: DefaultNDArray = zeros(DefaultShape(shape.dim(0), countTables))
-        for (i in (0 until shape.dim(0))) {
-            for (j in (0 until countTables)) {
+        val result: DefaultNDArray =
+            if (countTables == 1 && other.ndim == 1) zeros(DefaultShape(shape.dim(0))) else zeros(DefaultShape(shape.dim(0), countTables))
+        for (j in (0 until countTables)) {
+            for (i in (0 until shape.dim(0))) {
                 for (k in (0 until countK)) {
-                    val indexOfNewTable: Int = i * countTables + j
+                    val indexOfNewTable: Int = i + j * shape.dim(0)
                     result.addByIndexOrNothing(
                         indexOfNewTable,
-                        getIntOrZero(result.getByIndexOrNull(indexOfNewTable))
-                                + data[i * countK + k] * getIntOrZero((other as DefaultNDArray).getByIndexOrNull(j + i * countTables))
+                        data[shape.dim(0) * k + i] * getIntOrZero((other as DefaultNDArray).getByIndexOrNull(k + j * countK))
                     )
                 }
             }
