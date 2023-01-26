@@ -134,7 +134,7 @@ fun <T> flistOf(vararg values: T): FList<T> =
     if (values.isEmpty()) FList.nil()
     else {
         var result: FList<T> = FList.nil()
-        for (elem in values) {
+        values.forEach { elem ->
             result = FList.Cons(elem, result)
         }
         result.reverse()
