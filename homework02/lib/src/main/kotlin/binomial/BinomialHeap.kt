@@ -23,7 +23,7 @@ package binomial
  * top - взятие минимального элемента
  * drop - удаление минимального элемента
  */
-class BinomialHeap<T : Comparable<T>> private constructor(public val trees: FList<BinomialTree<T>?>) :
+class BinomialHeap<T : Comparable<T>> private constructor(private val trees: FList<BinomialTree<T>?>) :
     SelfMergeable<BinomialHeap<T>> {
     companion object {
         fun <T : Comparable<T>> single(value: T): BinomialHeap<T> = BinomialHeap(flistOf(BinomialTree.single(value)))
