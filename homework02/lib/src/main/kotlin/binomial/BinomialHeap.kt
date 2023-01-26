@@ -29,7 +29,7 @@ class BinomialHeap<T : Comparable<T>> private constructor(private val trees: FLi
         fun <T : Comparable<T>> single(value: T): BinomialHeap<T> = BinomialHeap(flistOf(BinomialTree.single(value)))
     }
 
-    fun findByOrder(order: Int): BinomialTree<T>? =
+    private fun findByOrder(order: Int): BinomialTree<T>? =
         trees.fold(null) { acc: BinomialTree<T>?, currentTree: BinomialTree<T>? ->
             if (currentTree?.order == order) currentTree else acc
         }
