@@ -76,14 +76,7 @@ sealed class FList<T>: Iterable<T> {
         override val isEmpty: Boolean
             get() = size == 0
 
-        override fun <U> fold(base: U, f: (U, T) -> U): U {
-            // made for with changing heads
-            var result: U = base
-            this.reverse().forEach { currentHead ->
-                result = f(result, currentHead)
-            }
-            return result
-        }
+        override fun <U> fold(base: U, f: (U, T) -> U): U = tail.fold(f(base, head), f)
 
         override fun filter(f: (T) -> Boolean): FList<T> {
             var result: FList<T> = nil()
