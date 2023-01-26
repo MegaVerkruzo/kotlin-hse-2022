@@ -75,8 +75,7 @@ sealed class FList<T> : Iterable<T> {
     data class Cons<T>(val head: T, val tail: FList<T>) : FList<T>() {
         override val size: Int
             get() = 1 + tail.size
-        override val isEmpty: Boolean
-            get() = size == 0
+        override val isEmpty: Boolean = false
 
         override fun <U> fold(base: U, f: (U, T) -> U): U {
             // made for with changing heads
