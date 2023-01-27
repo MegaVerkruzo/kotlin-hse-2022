@@ -1,6 +1,8 @@
 package homework03
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import java.net.URL
 
 fun getJSON(link: String): String {
@@ -34,6 +36,18 @@ fun getTopic(name: String): TopicSnapshot {
     return topicSnapshot
 }
 
-//fun getComments(commentsLink: String): CommentsSnapshot {
-//    val commentsSnapshot: CommentsSna
-//}
+fun rec(commentsInfoWrapper: CommentsInfoWrapper?) {
+    if (commentsInfoWrapper == null) return
+
+    for (comment in commentsInfoWrapper.data.wrapperComments.map { it.data }) {
+        println("author: ${comment.author} with text ${comment.text} and with count replies ${comment.replies?.data?.wrapperComments?.size ?: 0}")
+        println("Next replies")
+        rec(comment.replies)
+    }
+}
+
+fun getComments(commentsLink: String) {
+    val infoAndComments: List<CommentsInfoWrapper> = jacksonObjectMapper().readValue(getJSON(commentsLink))
+
+    rec(infoAndComments[1])
+}

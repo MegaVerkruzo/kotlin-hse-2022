@@ -3,6 +3,7 @@ package homework03
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
+
 data class CommentsInfoWrapper(@JsonProperty("data") val data: BaseCommentsWrapper)
 
 data class BaseCommentsWrapper(@JsonProperty("children") val wrapperComments: List<CommentWrapper>)

@@ -22,6 +22,8 @@ repositories {
 dependencies {
     // JSON
     implementation("com.fasterxml.jackson.core:jackson-databind:2.12.7.1")
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.1")
 
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
