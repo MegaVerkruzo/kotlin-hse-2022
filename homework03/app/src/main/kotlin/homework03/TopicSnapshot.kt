@@ -1,70 +1,97 @@
 package homework03
 
-import com.fasterxml.jackson.annotation.JsonAlias
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.net.URL
 
-data class TopicSnapshot (
-    @JsonAlias("created_utc")
-    val timeCreate: Int,
-
-    @JsonAlias("active_user_count")
-    val countOnlineSubscribers: Int,
-
-    @JsonAlias("subscribers")
-    val countAllSubscribers: Int,
-
-    @JsonAlias("public_description")
-    val description: String,
-
-    var topics: List<Topic> = listOf()
-)
-
-data class Topic (
-    val author: String,
-
-    @JsonAlias("created_utc")
-    val timeCreate: Int,
-
-    @JsonAlias("ups")
-    val countUps: Int,
-
-    @JsonAlias("downs")
-    val countDowns: Int,
-
-    val title: String,
-
-    @JsonAlias("selftext")
-    val text: String,
-
-    @JsonAlias("selftext_html")
-    val textHTML: String
-)
-
-data class TopicsData (
-    val data: Data
-)
-
-data class InfoData (
-    @JsonAlias("data")
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class InfoWrapper (
+    @JsonProperty("data")
     val topicSnapshot: TopicSnapshot
 )
 
-data class Data (
-    @JsonAlias("children")
-    val topics: List<Topic>
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class TopicSnapshot (
+    @JsonProperty("created_utc")
+    val timeCreate: Int,
+
+    @JsonProperty("active_user_count")
+    val countOnlineSubscribers: Int,
+
+    @JsonProperty("subscribers")
+    val countAllSubscribers: Int,
+
+    @JsonProperty("public_description")
+    val description: String,
+) {
+    var topics: List<Topic> = emptyList()
+}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class TopicsData (
+    @JsonProperty("data")
+    val data: Data
 )
 
-suspend fun getTopic(name: String): TopicSnapshot {
-    val topics: List<Topic> = ObjectMapper().readValue(
-        URL("https://www.reddit.com/r/$name/.json"),
-        TopicsData::class.java
-    ).data.topics
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class Data (
+    @JsonProperty("children")
+    val topics: ArrayList<TopicWrapper>
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class TopicWrapper (
+    @JsonProperty("data")
+    val topic: Topic
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class Topic (
+    @JsonProperty("id")
+    val id: String,
+
+    @JsonProperty("author")
+    val author: String,
+
+    @JsonProperty("created_utc")
+    val timeCreate: Int,
+
+    @JsonProperty("ups")
+    val countUps: Int,
+
+    @JsonProperty("downs")
+    val countDowns: Int,
+
+    @JsonProperty("title")
+    val title: String,
+
+    @JsonProperty("selftext")
+    val text: String,
+
+    @JsonProperty("selftext_html")
+    val textHTML: String?,
+
+    @JsonProperty("permalink")
+    var commentsLink: String = ""
+) {
+    init {
+        commentsLink = "https://www.reddit.com$commentsLink"
+    }
+}
+
+fun getTopic(name: String): TopicSnapshot {
+    // Get main info of group
     val topicSnapshot: TopicSnapshot = ObjectMapper().readValue(
-        URL("https://www.reddit.com/r/$name/about.json"),
-        InfoData::class.java
+        getJSON(name, "about.json"),
+        InfoWrapper::class.java
     ).topicSnapshot
-    topicSnapshot.topics = topics
+
+    // Getting topics
+    topicSnapshot.topics = ObjectMapper().readValue(
+        getJSON(name, ".json"),
+        TopicsData::class.java
+    ).data.topics.map { it.topic }
     return topicSnapshot
 }
 
@@ -75,8 +102,9 @@ fun getJSON(name: String, type: String): String {
         try {
             result = url.readText()
         } catch (error: Exception) {
-            println("Unsuccess try to get json")
+            println("Unsuccess try to get json by url: $url")
         }
     } while (result.isEmpty())
+    println(result)
     return result
 }

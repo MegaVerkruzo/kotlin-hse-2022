@@ -3,6 +3,8 @@
  */
 package homework03
 
+import kotlin.concurrent.thread
+
 class App {
     val greeting: String
         get() {
@@ -11,5 +13,9 @@ class App {
 }
 
 fun main() {
-    print(getJSON("Kotlin"))
+    val topic = getTopic("kotlin")
+    println(topic)
+    for (elem in topic.topics) {
+        println(elem)
+    }
 }
