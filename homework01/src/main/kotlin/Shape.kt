@@ -14,13 +14,6 @@ interface Shape : DimensionAware, SizeAware
  * Сама коллекция параметров недоступна, доступ - через методы интерфейса
  */
 class DefaultShape(private vararg val dimensions: Int) : Shape {
-    override val ndim: Int
-        get() = dimensions.size
-
-    override var size: Int = dimensions.reduce { accumulator, element ->
-        accumulator * element
-    }
-
     init {
         if (dimensions.isEmpty()) throw ShapeArgumentException.EmptyShapeException()
 
@@ -29,6 +22,13 @@ class DefaultShape(private vararg val dimensions: Int) : Shape {
             firstIncorrectIndex,
             dimensions[firstIncorrectIndex]
         )
+    }
+
+    override val ndim: Int
+        get() = dimensions.size
+
+    override var size: Int = dimensions.reduce { accumulator, element ->
+        accumulator * element
     }
 
     override fun dim(i: Int): Int =
