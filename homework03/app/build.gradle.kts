@@ -20,6 +20,8 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     // JSON
     implementation("com.fasterxml.jackson.core:jackson-databind:2.12.7.1")
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin

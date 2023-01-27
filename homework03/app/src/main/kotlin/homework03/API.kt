@@ -22,7 +22,7 @@ fun getJSON(link: String): String {
 
 fun getJSON(name: String, type: String): String = getJSON("https://www.reddit.com/r/$name/$type")
 
-fun getTopic(name: String): TopicSnapshot {
+suspend fun getTopic(name: String): TopicSnapshot {
     // Get main info of group
     val topicSnapshot: TopicSnapshot = ObjectMapper().readValue(
         getJSON(name, "about.json"),
@@ -61,7 +61,7 @@ fun rec(result: MutableList<MyComment>, commentsInfoWrapper: CommentsInfoWrapper
     }
 }
 
-fun getComments(commentsLink: String): CommentsSnapshot {
+suspend fun getComments(commentsLink: String): CommentsSnapshot {
     val mapper = jacksonObjectMapper()
     mapper.enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL)
     mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
