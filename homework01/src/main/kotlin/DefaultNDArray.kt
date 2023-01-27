@@ -40,7 +40,7 @@ interface NDArray : SizeAware, DimensionAware {
      *
      * Проблемы thread-safety игнорируем
      */
-    fun view(): NDArray = this
+    fun view(): NDArray
 
     /*
      * In-place сложение
@@ -125,6 +125,8 @@ class DefaultNDArray private constructor(private val shape: Shape, private val d
     }
 
     override fun copy(): NDArray = DefaultNDArray(shape, data.copyOf())
+
+    override fun view(): NDArray = object : NDArray by this {}
 
     override fun add(other: NDArray) {
         if (ndim - other.ndim > 1 || ndim < other.ndim) throw NDArrayException.IllegalOperationShapeSizeException(
