@@ -13,9 +13,9 @@ class App {
 }
 
 fun main() {
-    val topic = getTopic("kotlin")
-    println(topic)
-    for (elem in topic.topics) {
-        println(elem)
-    }
+//    val topic = getTopic("kotlin")
+    getComments("https://www.reddit.com/r/Kotlin/comments/10jm5a5/is_kotlin_scripting_dead/.json")
+//    for (elem in topic.topics) {
+//        println(elem)
+//    }
 }

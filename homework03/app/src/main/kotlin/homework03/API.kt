@@ -1,5 +1,6 @@
 package homework03
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -40,14 +41,19 @@ fun rec(commentsInfoWrapper: CommentsInfoWrapper?) {
     if (commentsInfoWrapper == null) return
 
     for (comment in commentsInfoWrapper.data.wrapperComments.map { it.data }) {
+        println("----------------------------------------------")
         println("author: ${comment.author} with text ${comment.text} and with count replies ${comment.replies?.data?.wrapperComments?.size ?: 0}")
         println("Next replies")
         rec(comment.replies)
+        println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
     }
 }
 
 fun getComments(commentsLink: String) {
-    val infoAndComments: List<CommentsInfoWrapper> = jacksonObjectMapper().readValue(getJSON(commentsLink))
+    val mapper = jacksonObjectMapper()
+    mapper.enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL)
+    mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+    val infoAndComments: List<CommentsInfoWrapper> = mapper.readValue(getJSON(commentsLink))
 
     rec(infoAndComments[1])
 }
