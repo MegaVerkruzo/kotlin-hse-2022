@@ -14,5 +14,8 @@ class App {
 
 fun main() {
     val topic = getTopic("kotlin")
-    println(topic.pickUpTime)
+    println(topic)
+    for (elem in topic.topics) {
+        println(elem)
+    }
 }
