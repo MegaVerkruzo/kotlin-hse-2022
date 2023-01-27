@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.net.URL
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.util.*
+import kotlin.collections.ArrayList
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class InfoWrapper (
@@ -23,10 +27,13 @@ data class TopicSnapshot (
     val countAllSubscribers: Int,
 
     @JsonProperty("public_description")
-    val description: String,
+    val description: String
 ) {
     var topics: List<Topic> = emptyList()
+
+    val pickUpTime: Int = LocalDateTime.now().toEpochSecond(ZoneOffset.ofHours(3)).toInt()
 }
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TopicsData (
