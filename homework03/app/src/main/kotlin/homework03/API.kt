@@ -3,27 +3,10 @@ package homework03
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import homework03.serializer.getCommentJSON
+import homework03.serializer.getTopicJSON
 import java.io.File
 import java.io.IOException
-import java.net.URL
-
-const val redditLink = "https://www.reddit.com/r"
-
-fun getJSON(link: String): String {
-    val url = URL(link)
-    var result: String = ""
-    do {
-        try {
-            result = url.readText()
-        } catch (_: Exception) {
-        }
-    } while (result.isEmpty())
-    return result
-}
-
-fun getCommentJSON(name: String, idWithTitle: String): String = getJSON("$redditLink/$name/comments/$idWithTitle/.json")
-
-fun getTopicJSON(name: String, type: String): String = getJSON("$redditLink/$name/$type")
 
 suspend fun getTopic(name: String): TopicSnapshot {
     val mapper = jacksonObjectMapper()
