@@ -15,7 +15,7 @@ private fun <T: Any> StringBuilder.serializeObject(data: Iterable<T>, klass: KCl
         }) throw IllegalArgumentException("not all types match")
 
     data.forEach {
-        serializeObject(it)
+       serializeObject(it)
         append("\n")
     }
 }
@@ -24,7 +24,7 @@ private fun StringBuilder.serializeNumber(value: Number) = apply {
     append(value)
 }
 
-val numberTypes = listOf(Integer::class, Int::class, Short::class, Long::class, Byte::class, Float::class, Double::class)
+//val numberTypes = listOf()
 
 private fun StringBuilder.serializeValue(value: Any) = apply {
     val kClass = value.javaClass.kotlin
@@ -32,16 +32,14 @@ private fun StringBuilder.serializeValue(value: Any) = apply {
         String::class -> {
             serializeString(value as String)
         }
-        numberTypes -> {
+        Integer::class, Int::class, Short::class, Long::class, Byte::class, Float::class, Double::class -> {
             serializeNumber(value as Number)
         }
     }
 }
 
 private fun StringBuilder.serializeString(value: String) = apply {
-    append('"')
-    append(value)
-    append('"')
+    append('"').append(value.replace('\n', '\r')).append('"')
 }
 
 

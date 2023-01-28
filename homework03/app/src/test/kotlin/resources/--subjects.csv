@@ -1,192 +1,27 @@
-"author","commentsLink","countDislikes","countLikes","id","text","timeCreate","title"
-"Sen_ops","10n9h08/will_loom_kill_kotlin_coroutines",,,"10n9h08","",,"Will Loom Kill Kotlin Coroutines?"
-"S5904","10n29rq/why_do_kotlin_tests_for_gradle_projects_have_to",,,"10n29rq","I was reading the Kotlin documentation for creating tests, and noticed that it is normal to create test functions inside classes.
-
-Why is this needed?",,"Why do Kotlin tests (for Gradle projects) have to be inside classes?"
-"ComprehensiveBird720","10navtx/it_is_a_good_way_to_hide_mockmvcs_assertions",,,"10navtx","I am building a web application using Kotlin and Spring Boot, I use MockMvc to write integration tests.
-
-I'm not satisfied how the assertions looks like:
-```kotlin
-        @Test
-        fun `Get profile by id`() {
-            thereIsATeacher(lissaSkipper)
-
-            mockMvc.get("/teacher/{id}", "52058608")
-                .andExpect {
-                    status { isOk() }
-                    jsonPath("$.id") { value("52058608") }
-                    jsonPath("$.slug") { value("lissa-skipper-math-teacher") }
-                }
-        }
-```
-
-the `jsonPath("$.id") { value("52058608") }` part, for me, is not good enough. So, I spent a few hours and tried to build "domain assertion", using DSL. Now the test looks:
-
-```kotlin
-        @Test
-        fun `Get profile by id`() {
-            thereIsATeacher(lissaSkipper)
-
-            mockMvc.get("/teacher/{id}", "52058608")
-                .andExpect {
-                    status { isOk() }
-
-                    teacherProfile {
-                        id("52058608")
-                        slug("lissa-skipper-math-teacher")
-                        profilePhoto {
-                            url("https://example.com/photo.jpg")
-                            alt("Lissa Skipper - math teacher")
-                        }
-                        joined("2023-01-22T10:00:00Z")
-                    }
-                }
-        }
-```
-
-
-and here are assertion classes:
-
-```kotlin
-fun MockMvcResultMatchersDsl.teacherProfile(assertion: TeacherProfileRestAssertion.() -&gt; Unit) {
-    TeacherProfileRestAssertion(this).apply(assertion)
-}
-
-class TeacherProfileRestAssertion internal constructor(private val dsl: MockMvcResultMatchersDsl) {
-
-    fun id(expectedValue: String) {
-        dsl.jsonPath("$.id") { value(expectedValue) }
-    }
-
-    fun slug(expectedValue: String) {
-        dsl.jsonPath("$.slug") { value(expectedValue) }
-    }
-
-    fun profilePhoto(imageAssertion: ImageRestAssertion.() -&gt; Unit) {
-        ImageRestAssertion(dsl, "$.profilePhoto").apply(imageAssertion)
-    }
-// ...
-}
-
-class ImageRestAssertion internal constructor(
-    private val dsl: MockMvcResultMatchersDsl,
-    private val jsonPrefix: String = "$"
-) {
-
-    fun url(expectedValue: String) {
-        dsl.jsonPath("$jsonPrefix.url") { value(expectedValue) }
-    }
-//....
-}
-```
-
-What do you think? It's a good idea to hide jsonPaths behind such dsl assertions? Or maybe do you have some other elegant solutions to hide technical details behind business code?
-
-I'm not a big fan of deserializing to DTO objects, using production's dtos does not test how the response actually looks like and keeping two versions of the same thing is tiring.",,"It is a good way to hide MockMvcs assertions?"
-"adamr_","10mebyt/meta_should_the_trend_of_users_posting_android",,,"10mebyt","I follow this subreddit because I care about Kotlin, the language. I understand that Kotlin targets Android, but there is seemingly a neverending trend of users asking *Android*-only questions that are against the rules and are more appropriate for r/AndroidDev or related.
-
-Given the fact that too many conflate “Kotlin” and “Android,” what should be done about these questions? And why are moderators not removing them in the first place?",,"[Meta] Should the trend of users posting Android questions on here be curbed? If so, how?"
-"dmcg","10mihcr/master_complex_algorithm_testing_using",,,"10mihcr","",,"Master Complex Algorithm Testing Using Property-Based Tests"
-"d_demidko","10mihh3/is_it_possible_to_make_ios_apps_with_kotlin",,,"10mihh3","Wanted  to make a small GUI app for iOS but I am very much trying to avoid  having to use Swift.  I wanted to see if it was possible with Kotlin.",,"Is it possible to make iOS apps with Kotlin?"
-"dackel_132","10mce1e/how_to_embed_interactive_kotlin_code_into_your",,,"10mce1e","",,"How to Embed Interactive Kotlin Code into Your Medium Articles"
-"Normal_Age2887","10mz3jk/animationdrawable_not_working",,,"10mz3jk"," Hello everyone!
-
-Does anyone know how I can add an AnimationDrawable in a watch face project?
-
-I'm trying to do it but it only shows the first frame and dont goes on, I'm really stuck.
-
-Heres the link of my stackoverflow post for more details: [kotlin - AnimationDrawable not animating on Watch Face - Stack Overflow](https://stackoverflow.com/questions/75215739/animationdrawable-not-animating-on-watch-face)
-
-Please, help!",,"AnimationDrawable not Working"
-"cswld","10ly0jl/kotlin_data_objects_new_in_kotlin_19",,,"10ly0jl","",,"Kotlin Data Objects (New in Kotlin 1.9)"
-"FredrickandNeval","10mnflm/first_time_here_could_not_find_compile_target",,,"10mnflm","",,"First time here; Could not find compile target android-33 for modules :app"
-"VerKwanze","10lwy73/how_does_kmm_work_internally",,,"10lwy73","Hi all!
-
-Can someone help me understand the way KMM works behind the scenes? I tried browsing the docs but I couldn't get a grasp.
-
-Btw I'm running KMM now, it's a blast so I have at least surface level knowledge of how to build a KMM project 
-
-Subquestions:
-
-How does shared KMM code run on iOS?
-
-How does shared KMM code run on Android?",,"How does KMM work internally?"
-"franz_see","10lwjsr/is_there_a_java_file_to_kotlin_file_translator",,,"10lwjsr","I vaguely remember IntelliJ having that before when Kotlin was new. Was looking for it recently but couldnt find it
-
-Is there one? Or is my memory deceiving me? 😅",,"Is there a java file to kotlin file translator?"
-"Visible_Visual5910","10mhtaq/cuserslenovogradlecachestransforms2files212bcd0a6b",,,"10mhtaq","C:/Users/LENOVO/.gradle/caches/transforms-2/files-2.1/2bcd0a6b95744b6f0ee26f9336bd22eb/jetified-annotation-jvm-1.6.0-beta01.jar!/META-INF/annotation.kotlin\_module: Module was compiled with an incompatible version of Kotlin. The binary version of its metadata is 1.8.0, expected version is 1.6.0.
-
-&amp;#x200B;
-
-buildscript **{**  
- ext.kotlin\_version = **'1.4.32'**  
- ext.anko\_version=**'0.10.8'**  
- repositories **{**  
- jcenter()  
-maven **{**  
- url **'https://maven.google.com/'**  
- name **'Google'**  
- **}**  
- google()  
- **}**  
- dependencies **{**  
- classpath **'com.android.tools.build:gradle:4.1.2'**  
- classpath **'com.google.gms:google-services:4.3.3'**  
- classpath **'org.greenrobot:greendao-gradle-plugin:3.2.1'**  
- classpath **'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'**  
- classpath **'com.google.firebase:firebase-crashlytics-gradle:2.4.1'**  
- *// NOTE: Do not place your application dependencies here; they belong*  
-*// in the individual module build.gradle files*  
-*// Add the dependency for the Performance Monitoring plugin*  
- classpath **'com.google.firebase:perf-plugin:1.4.1'**  
- **}**",,"C:/Users/LENOVO/.gradle/caches/transforms-2/files-2.1/2bcd0a6b95744b6f0ee26f9336bd22eb/jetified-annotation-jvm-1.6.0-beta01.jar!/META-INF/annotation.kotlin_module: Module was compiled with an incompatible version of Kotlin. The binary version of its metadata is 1.8.0, expected version is 1.6.0."
-"CorneliuZCodreanu","10lljav/recommendations_for_books_advice_for_someone_that",,,"10lljav","I read through the docs and developed for android in kotlin a few years back. I want to get back into using kotlin on personal projects etc. any advice with books tutorials etc on getting back up to date with the language. cheers!",,"recommendations for books advice for someone that hasnt worked with kotlin for a few years."
-"Puzzled_Strategy2622","10lsnos/kotlinnative_multiple_files_entry_points",,,"10lsnos","When compiling a kotlin native project with multiple entry points, how do you specify the individual files to compile into the executable?
-
-I have multiple files in a single package but I want to compile each file into its own binary without including other files into its compilation.",,"Kotlin/Native Multiple Files &amp; Entry Points"
-"exosyphon11","10llb4w/imperative_to_functional_style",,,"10llb4w","I'm trying to get better at Functional programming in Kotlin. Here's an example I made of going from an Imperative solution to a Functional one.",,"Imperative to Functional style"
-"Humpsel","10l52un/kotlin_dataframe_091_released",,,"10l52un","",,"Kotlin Dataframe 0.9.1 released!"
-"Significant_Acadia72","10loh8c/is_there_anything_wrong_with_my_code_that_would",,,"10loh8c","I have confirmed with background colors that the recycler view (cycle) shows, but it does not contain the item\_photo
-
-    if (user != null)  {
-    val query = FirebaseDatabase.getInstance().reference.child("people").child("imageUrl")
-                val options = FirebaseRecyclerOptions.Builder&lt;DataSnapshot&gt;()
-                    .setQuery(query, DataSnapshot::class.java)
-                    .build()
-    
-                class PhotoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-                    val photoImageView = itemView.findViewById&lt;ImageView&gt;(R.id.image_view)
-                }
-    
-                val adapter = object : FirebaseRecyclerAdapter&lt;DataSnapshot, PhotoViewHolder&gt;(options) {
-                    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
-                        val view =
-                            LayoutInflater.from(parent.context).inflate(R.layout.item_photo, parent, false)
-                        return PhotoViewHolder(view)
-                    }
-    
-                    override fun onBindViewHolder(holder: PhotoViewHolder, position: Int, model: DataSnapshot) {
-                        val imageUrl = model.child("imageUrl").getValue(String::class.java)
-                        Glide.with(holder.itemView.context)
-                            .load(imageUrl)
-                            .into(holder.photoImageView)
-                    }
-                }
-    
-                val recyclerView = findViewById&lt;RecyclerView&gt;(R.id.cycle)
-                recyclerView.layoutManager = LinearLayoutManager(this)
-                recyclerView.adapter = adapter
-                adapter.startListening()
-            }",,"Is there anything wrong with my code that would prohibit it from displaying images taken from firebase?"
-"IHearTheAgniKaiTheme","10l807t/is_it_possible_to_make_mac_desktop_apps_with",,,"10l807t","Wanted to make a small GUI app for MacOS but I am very much trying to avoid having to use Swift.  I wanted to see if it was possible with Kotlin.",,"Is it possible to make Mac desktop apps with Kotlin?"
-"Illustrious_Top153","10le1c4/kotlin_mutation_tests",,,"10le1c4","Has anyone successfully used any mutation test frameworks with Kotlin?
-
-I've been struggling with pitest, sadly it has a lot of false positives (especially with Kotlin).",,"Kotlin Mutation Tests"
-"BlueAndYellowSoul","10l2m83/what_is_the_porpuse_of_implementing_and_interface",,,"10l2m83","I apologize if my English is not good enough. 
-
-For what I've read, you cannot implement interfaces in Static classes in Java since you cannot instantiate one.",,"What is the porpuse of implementing and interface in a companion object? What is it's equivalent in Java?"
-"lbarasti","10kdgx8/kotlin_refactoring_8_tips_from_practice",,,"10kdgx8","",,"Kotlin refactoring: 8 tips from practice"
-"LukasLechnerDev","10l1brt/concurrent_flows_with_the_buffer_operator_kotlin",,,"10l1brt","",,"Concurrent Flows with the buffer operator | Kotlin Flow for Android Development"
-"kgsensei","10l0vsl/notification_service_question",,,"10l0vsl","How do mobile apps like Instagram and Reddit send post notifications? Is it a foreground service or something?",,"Notification Service Question"
-"mike_jack","10krsq9/simulating_troubleshooting_blocked_threads_in",,,"10krsq9","",,"Simulating &amp; troubleshooting BLOCKED threads in Kotlin"
+"author","countDislikes","countLikes","id","timeCreate","title"
+"Sen_ops",0,7,"10n9h08",1674891815,"will_loom_kill_kotlin_coroutines"
+"S5904",0,6,"10n29rq",1674869016,"why_do_kotlin_tests_for_gradle_projects_have_to"
+"ComprehensiveBird720",0,1,"10navtx",1674897330,"it_is_a_good_way_to_hide_mockmvcs_assertions"
+"adamr_",0,34,"10mebyt",1674801490,"meta_should_the_trend_of_users_posting_android"
+"dmcg",0,8,"10mihcr",1674818341,"master_complex_algorithm_testing_using"
+"d_demidko",0,5,"10mihh3",1674818354,"is_it_possible_to_make_ios_apps_with_kotlin"
+"dackel_132",0,12,"10mce1e",1674794757,"how_to_embed_interactive_kotlin_code_into_your"
+"Normal_Age2887",0,0,"10mz3jk",1674860988,"animationdrawable_not_working"
+"cswld",0,22,"10ly0jl",1674755927,"kotlin_data_objects_new_in_kotlin_19"
+"FredrickandNeval",0,0,"10mnflm",1674832953,"first_time_here_could_not_find_compile_target"
+"VerKwanze",0,7,"10lwy73",1674753234,"how_does_kmm_work_internally"
+"franz_see",0,2,"10lwjsr",1674752249,"is_there_a_java_file_to_kotlin_file_translator"
+"Visible_Visual5910",0,0,"10mhtaq",1674815769,"cuserslenovogradlecachestransforms2files212bcd0a6b"
+"CorneliuZCodreanu",0,9,"10lljav",1674714733,"recommendations_for_books_advice_for_someone_that"
+"Puzzled_Strategy2622",0,1,"10lsnos",1674742241,"kotlinnative_multiple_files_entry_points"
+"exosyphon11",0,5,"10llb4w",1674713893,"imperative_to_functional_style"
+"Humpsel",0,34,"10l52un",1674669819,"kotlin_dataframe_091_released"
+"Significant_Acadia72",0,1,"10loh8c",1674727429,"is_there_anything_wrong_with_my_code_that_would"
+"IHearTheAgniKaiTheme",0,12,"10l807t",1674676641,"is_it_possible_to_make_mac_desktop_apps_with"
+"Illustrious_Top153",0,2,"10le1c4",1674691565,"kotlin_mutation_tests"
+"BlueAndYellowSoul",0,6,"10l2m83",1674663856,"what_is_the_porpuse_of_implementing_and_interface"
+"lbarasti",0,50,"10kdgx8",1674587639,"kotlin_refactoring_8_tips_from_practice"
+"LukasLechnerDev",0,1,"10l1brt",1674660683,"concurrent_flows_with_the_buffer_operator_kotlin"
+"kgsensei",0,0,"10l0vsl",1674659573,"notification_service_question"
+"mike_jack",0,5,"10krsq9",1674626934,"simulating_troubleshooting_blocked_threads_in"
 
