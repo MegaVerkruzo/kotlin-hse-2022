@@ -1,6 +1,7 @@
 package homework03.serializer
 
 import kotlin.reflect.KClass
+import kotlin.reflect.KVisibility
 import kotlin.reflect.full.memberProperties
 
 fun <T: Any> csvSerialize(data: Iterable<T>, klass: KClass<T>) = buildString { serializeObject(data, klass) }
@@ -23,7 +24,7 @@ private fun StringBuilder.serializeNumber(value: Number) = apply {
     append(value)
 }
 
-val numberTypes = listOf(Integer::class, Short::class, Long::class, Byte::class, Float::class, Double::class)
+val numberTypes = listOf(Integer::class, Int::class, Short::class, Long::class, Byte::class, Float::class, Double::class)
 
 private fun StringBuilder.serializeValue(value: Any) = apply {
     val kClass = value.javaClass.kotlin
@@ -54,7 +55,7 @@ private fun <T: Any> StringBuilder.serializeHeader(klass: KClass<T>) = apply {
             serializeString("value")
         }
         else -> {
-            properties.joinTo(this, ",") { p ->
+            properties.filter { it.visibility != KVisibility.PRIVATE }.joinTo(this, ",") { p ->
                 serializeString(p.name)
                 ""
             }
@@ -74,7 +75,7 @@ private fun StringBuilder.serializeObject(value: Any) {
             serializeString(value as String)
         }
         else -> {
-            properties.joinTo(this, ",") { p ->
+            properties.filter { it.visibility != KVisibility.PRIVATE }.joinTo(this, ",") { p ->
                 serializeValue(p.get(value) ?: throw IllegalArgumentException())
                 ""
             }

@@ -29,8 +29,6 @@ fun getTopicJSON(name: String, type: String): String = getJSON("$redditLink/$nam
 
 suspend fun getTopic(name: String): TopicSnapshot {
     val mapper = jacksonObjectMapper()
-    mapper.enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL)
-    mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
     // Get main info of group
     val topicSnapshot: TopicSnapshot = mapper.readValue(
         getTopicJSON(name, "about.json"),
