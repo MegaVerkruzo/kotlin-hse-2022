@@ -18,7 +18,7 @@ class AppTest {
     @Test
     fun writingFile() {
         runBlocking {
-            saveFile("test", "src/test/kotlin/recourses", "myfile.txt")
+            saveFile("test", "src/test/kotlin/recourses", "test")
         }
     }
 
