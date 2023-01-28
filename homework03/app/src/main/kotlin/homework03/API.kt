@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import java.io.File
+import java.io.IOException
 import java.net.URL
 
 fun getJSON(link: String): String {
@@ -12,8 +14,7 @@ fun getJSON(link: String): String {
     do {
         try {
             result = url.readText()
-        } catch (error: Exception) {
-            println("Unsuccess try to get json by url: $url")
+        } catch (_: Exception) {
         }
     } while (result.isEmpty())
     println(result)
@@ -41,9 +42,6 @@ fun rec(result: MutableList<MyComment>, commentsInfoWrapper: CommentsInfoWrapper
     if (commentsInfoWrapper == null) return
 
     for (comment in commentsInfoWrapper.data.wrapperComments.map { it.data }) {
-        println("----------------------------------------------")
-        println("author: ${comment.author} with text ${comment.text} and with count replies ${comment.replies?.data?.wrapperComments?.size ?: 0}")
-        println("Next replies")
         result.add(
             MyComment(
                 id = result.size,
@@ -57,7 +55,6 @@ fun rec(result: MutableList<MyComment>, commentsInfoWrapper: CommentsInfoWrapper
             )
         )
         rec(result, comment.replies, result.size - 1, depth + 1)
-        println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
     }
 }
 
@@ -72,4 +69,19 @@ suspend fun getComments(commentsLink: String): CommentsSnapshot {
     rec(result.comments, infoAndComments[1])
 
     return result
+}
+
+suspend fun saveFile(text: String, path: String, name: String) {
+    val fileName = "$path/$name"
+    val myFile = File(fileName)
+
+    myFile.createNewFile()
+
+    try {
+        myFile.printWriter().use { out ->
+            out.println(text)
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
 }

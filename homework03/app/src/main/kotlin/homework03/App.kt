@@ -15,9 +15,7 @@ class App {
 fun main() {
 //    val topic = getTopic("kotlin")
     runBlocking {
-        getComments("https://www.reddit.com/r/Kotlin/comments/10jm5a5/is_kotlin_scripting_dead/.json")
+//        getComments("https://www.reddit.com/r/Kotlin/comments/10jm5a5/is_kotlin_scripting_dead/.json")
+        saveFile("sdjflksdjfl", "app/src/main/kotlin/resources", "myfile.txt")
     }
-//    for (elem in topic.topics) {
-//        println(elem)
-//    }
 }
