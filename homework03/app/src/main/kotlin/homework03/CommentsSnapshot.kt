@@ -16,6 +16,7 @@ data class CommentWrapper(@JsonProperty("data") val data: Comment)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Comment(
+    @JsonProperty("id") val id: String?,
     @JsonProperty("created_utc") val timeCreate: Int,
     @JsonProperty("ups") val countLikes: Int,
     @JsonProperty("downs") val countDislikes: Int,
@@ -31,7 +32,7 @@ class CommentsSnapshot {
 }
 
 class MyComment(
-    val id: Int,
+    val id: String,
     val replyTo: Int = -1,
     val depth: Int,
     val timeCreate: Int,

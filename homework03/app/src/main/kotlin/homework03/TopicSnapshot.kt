@@ -2,8 +2,6 @@ package homework03
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.ObjectMapper
-import java.net.URL
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
@@ -38,12 +36,16 @@ data class Topic(
     @JsonProperty("id") val id: String,
     @JsonProperty("author") val author: String,
     @JsonProperty("created_utc") val timeCreate: Int,
-    @JsonProperty("ups") val countUps: Int,
-    @JsonProperty("downs") val countDowns: Int,
+    @JsonProperty("ups") val countLikes: Int,
+    @JsonProperty("downs") val countDislikes: Int,
     @JsonProperty("title") val title: String,
     @JsonProperty("selftext") val text: String,
     @JsonProperty("selftext_html") val textHTML: String?,
-    @JsonProperty("permalink") val commentsLink: String
+    // I know that it's problem that it's var but I can't figure out to delete symbols from 'permalink' and left value const
+    @JsonProperty("permalink") var commentsLink: String
 ) {
-    fun getCorrectLink(): String = "https://www.reddit.com$commentsLink"
+    init {
+        for (i in 0..3) commentsLink = commentsLink.dropWhile { it != '/' }.drop(1)
+        commentsLink = commentsLink.dropLast(1)
+    }
 }

@@ -3,12 +3,44 @@
  */
 package homework03
 
+import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class AppTest {
-    @Test fun appHasAGreeting() {
+    @Test
+    fun appHasAGreeting() {
         val classUnderTest = App()
         assertNotNull(classUnderTest.greeting, "app should have a greeting")
+    }
+
+    @Test
+    fun writingFile() {
+        runBlocking {
+            saveFile("test", "src/test/kotlin/recourses", "myfile.txt")
+        }
+    }
+
+    @Test
+    fun checkGettingTopic() {
+        val topic = runBlocking { getTopic("kotlin") }
+        assertEquals(25, topic.topics.size)
+
+    }
+
+    // Yea, I know that I gave link but I have no time for this I just writing code fast and can't stop
+    // permalink has this thing in comment and I don't understand why they couldn't
+    @Test
+    fun checkGettingComments() {
+        val commentsSnapshot =
+            runBlocking { getComments("Kotlin", "10jm5a5/is_kotlin_scripting_dead") }
+        for (elem in commentsSnapshot.comments) println(elem.id )
+    }
+
+    @Test
+    fun writeTopicsToCSV() {
+        val topic = runBlocking { getTopic("kotlin") }
+
     }
 }

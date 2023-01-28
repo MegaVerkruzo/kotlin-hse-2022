@@ -41,6 +41,8 @@ private fun StringBuilder.serializeString(value: String) = apply {
     append('"')
 }
 
+
+
 private fun <T: Any> StringBuilder.serializeHeader(klass: KClass<T>) = apply {
     append("")
     val properties = klass.memberProperties

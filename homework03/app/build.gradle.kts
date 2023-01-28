@@ -36,6 +36,13 @@ dependencies {
     // This dependency is used by the application.
     implementation("com.google.guava:guava:30.1.1-jre")
 
+
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+
+    // Use the Kotlin JDK 8 standard library.
+    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 
