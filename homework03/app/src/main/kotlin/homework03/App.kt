@@ -3,7 +3,9 @@
  */
 package homework03
 
+import homework03.serializer.csvSerialize
 import kotlinx.coroutines.runBlocking
+import java.lang.IllegalArgumentException
 
 class App {
     val greeting: String
@@ -12,9 +14,29 @@ class App {
         }
 }
 
-fun main() {
-//    val topic = getTopic("kotlin")
-    runBlocking {
-//        getComments("https://www.reddit.com/r/Kotlin/comments/10jm5a5/is_kotlin_scripting_dead/.json")
+fun main(args: Array<String>) = runBlocking {
+    if (args.isEmpty()) {
+        throw IllegalArgumentException("No titles")
     }
+
+    val topic = runBlocking { getTopic("kotlin") }
+
+    topic.topics = topic.topics.filter { it.title in args }
+
+    val ids  = topic.topics.map { Pair(it.id, it.title) }
+
+    if (ids.isEmpty()) {
+        throw IllegalArgumentException("No titles")
+    }
+    val comment = getComments("kotlin", "${ids[0].first}/${ids[0].second}")
+
+    ids.forEachIndexed { index, pair ->
+        if (index > 0) {
+            comment.comments.addAll(getComments("kotlin", "${pair.first}/${pair.second}").comments)
+        }
+    }
+
+    saveFile(csvSerialize(topic.topics, Topic::class), "app/src/main/kotlin/resources", "--subjects.csv")
+    saveFile(csvSerialize(comment.comments, MyComment::class), "app/src/main/kotlin/resources", "--comments.csv")
 }
+

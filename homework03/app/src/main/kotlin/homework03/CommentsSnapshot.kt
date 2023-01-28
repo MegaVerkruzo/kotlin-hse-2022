@@ -28,7 +28,7 @@ data class Comment(
 class CommentsSnapshot {
     val timeCreate: Int = LocalDateTime.now().toEpochSecond(ZoneOffset.ofHours(3)).toInt()
 
-    val comments: MutableList<MyComment> = mutableListOf()
+    var comments: MutableList<MyComment> = mutableListOf()
 }
 
 class MyComment(
