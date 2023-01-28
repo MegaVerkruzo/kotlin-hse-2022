@@ -49,4 +49,15 @@ class AppTest {
             saveFile(result, "src/test/kotlin/resources", "--subjects.csv")
         }
     }
+
+    @Test
+    fun writeCommentariesToCSV() {
+        val comment = runBlocking { getComments("Kotlin", "10mebyt/meta_should_the_trend_of_users_posting_android") }
+
+        val result = csvSerialize(comment.comments, MyComment::class)
+
+        runBlocking {
+            saveFile(result, "src/test/kotlin/resources", "--comments.csv")
+        }
+    }
 }

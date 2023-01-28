@@ -43,7 +43,13 @@ suspend fun getTopic(name: String): TopicSnapshot {
     return topicSnapshot
 }
 
-private fun rec(result: MutableList<MyComment>, commentsInfoWrapper: CommentsInfoWrapper?, prevId: Int = -1, depth: Int = 0) {
+private fun rec(
+    result: MutableList<MyComment>,
+    topicId: String,
+    commentsInfoWrapper: CommentsInfoWrapper?,
+    prevId: Int = -1,
+    depth: Int = 0
+) {
     if (commentsInfoWrapper == null) return
 
     for (comment in commentsInfoWrapper.data.wrapperComments.map { it.data }) {
@@ -56,10 +62,11 @@ private fun rec(result: MutableList<MyComment>, commentsInfoWrapper: CommentsInf
                 countLikes = comment.countLikes,
                 countDislikes = comment.countDislikes,
                 author = comment.author ?: "",
-                text = comment.text ?: ""
+                text = comment.text ?: "",
+                topicId = topicId
             )
         )
-        rec(result, comment.replies, result.size - 1, depth + 1)
+        rec(result, topicId, comment.replies, result.size - 1, depth + 1)
     }
 }
 
@@ -71,7 +78,7 @@ suspend fun getComments(name: String, idWithTitle: String): CommentsSnapshot {
 
     val result = CommentsSnapshot()
 
-    rec(result.comments, infoAndComments[1])
+    rec(result.comments, idWithTitle.dropLastWhile { it != '/' }.dropLast(1), infoAndComments[1])
 
     return result
 }
@@ -89,10 +96,4 @@ suspend fun saveFile(text: String, path: String, name: String) {
     } catch (e: IOException) {
         e.printStackTrace()
     }
-}
-
-suspend fun saveTopic(topicSnapshot: TopicSnapshot) {
-    val topicsCSV = csvSerialize(topicSnapshot.topics, Topic::class)
-
-    saveFile(topicsCSV, "app/src/main/kotlin/resources", "--subjects.csv")
 }

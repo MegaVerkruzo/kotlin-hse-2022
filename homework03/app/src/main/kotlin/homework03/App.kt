@@ -16,6 +16,5 @@ fun main() {
 //    val topic = getTopic("kotlin")
     runBlocking {
 //        getComments("https://www.reddit.com/r/Kotlin/comments/10jm5a5/is_kotlin_scripting_dead/.json")
-        saveTopic(getTopic("Kotlin"))
     }
 }

@@ -40,4 +40,5 @@ class MyComment(
     val countDislikes: Int,
     val text: String,
     val author: String,
+    val topicId: String
 )
