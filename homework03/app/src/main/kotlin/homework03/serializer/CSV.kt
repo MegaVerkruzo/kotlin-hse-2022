@@ -24,11 +24,8 @@ private fun StringBuilder.serializeNumber(value: Number) = apply {
     append(value)
 }
 
-//val numberTypes = listOf()
-
 private fun StringBuilder.serializeValue(value: Any) = apply {
-    val kClass = value.javaClass.kotlin
-    when (kClass) {
+    when (value.javaClass.kotlin) {
         String::class -> {
             serializeString(value as String)
         }
