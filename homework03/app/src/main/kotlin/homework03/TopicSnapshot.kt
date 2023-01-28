@@ -39,13 +39,13 @@ data class Topic(
     @JsonProperty("ups") val countLikes: Int,
     @JsonProperty("downs") val countDislikes: Int,
     @JsonProperty("title") val title: String,
-    @JsonProperty("selftext") val text: String,
+    @JsonProperty("selftext") val text: String?,
     @JsonProperty("selftext_html") val textHTML: String?,
     // I know that it's problem that it's var but I can't figure out to delete symbols from 'permalink' and left value const
-    @JsonProperty("permalink") var commentsLink: String
+    @JsonProperty("permalink") var commentsLink: String?
 ) {
     init {
-        for (i in 0..3) commentsLink = commentsLink.dropWhile { it != '/' }.drop(1)
-        commentsLink = commentsLink.dropLast(1)
+        for (i in 0..3) commentsLink = commentsLink?.dropWhile { it != '/' }?.drop(1)
+        commentsLink = commentsLink?.dropLast(1)
     }
 }

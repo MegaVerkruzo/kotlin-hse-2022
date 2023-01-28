@@ -28,21 +28,24 @@ fun getCommentJSON(name: String, idWithTitle: String): String = getJSON("$reddit
 fun getTopicJSON(name: String, type: String): String = getJSON("$redditLink/$name/$type")
 
 suspend fun getTopic(name: String): TopicSnapshot {
+    val mapper = jacksonObjectMapper()
+    mapper.enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL)
+    mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
     // Get main info of group
-    val topicSnapshot: TopicSnapshot = ObjectMapper().readValue(
+    val topicSnapshot: TopicSnapshot = mapper.readValue(
         getTopicJSON(name, "about.json"),
         InfoWrapper::class.java
     ).topicSnapshot
 
     // Getting topics
-    topicSnapshot.topics = ObjectMapper().readValue(
+    topicSnapshot.topics = mapper.readValue(
         getTopicJSON(name, ".json"),
         TopicsData::class.java
     ).data.topics.map { it.topic }
     return topicSnapshot
 }
 
-fun rec(result: MutableList<MyComment>, commentsInfoWrapper: CommentsInfoWrapper?, prevId: Int = -1, depth: Int = 0) {
+private fun rec(result: MutableList<MyComment>, commentsInfoWrapper: CommentsInfoWrapper?, prevId: Int = -1, depth: Int = 0) {
     if (commentsInfoWrapper == null) return
 
     for (comment in commentsInfoWrapper.data.wrapperComments.map { it.data }) {

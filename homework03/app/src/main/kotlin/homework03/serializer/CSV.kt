@@ -23,13 +23,15 @@ private fun StringBuilder.serializeNumber(value: Number) = apply {
     append(value)
 }
 
+val numberTypes = listOf(Integer::class, Short::class, Long::class, Byte::class, Float::class, Double::class)
+
 private fun StringBuilder.serializeValue(value: Any) = apply {
     val kClass = value.javaClass.kotlin
     when (kClass) {
         String::class -> {
             serializeString(value as String)
         }
-        Integer::class, Short::class, Long::class, Byte::class, Float::class, Double::class -> {
+        numberTypes -> {
             serializeNumber(value as Number)
         }
     }
@@ -64,6 +66,9 @@ private fun StringBuilder.serializeObject(value: Any) {
     val kClass = value.javaClass.kotlin
     val properties = kClass.memberProperties
 
+    println(kClass)
+    println(properties.first().get(value))
+    println(value.toString())
     when (kClass) {
         String::class -> {
             serializeString(value as String)

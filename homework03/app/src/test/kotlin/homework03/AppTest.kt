@@ -3,6 +3,7 @@
  */
 package homework03
 
+import homework03.serializer.csvSerialize
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -42,5 +43,10 @@ class AppTest {
     fun writeTopicsToCSV() {
         val topic = runBlocking { getTopic("kotlin") }
 
+        val result = csvSerialize(topic.topics, Topic::class)
+
+        runBlocking {
+            saveFile(result, "src/test/kotlin/resources", "--subjects.csv")
+        }
     }
 }
