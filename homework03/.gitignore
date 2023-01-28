@@ -6,3 +6,4 @@ build
 .idea
 
 app/src/test/kotlin/resources
+app/src/main/kotlin/resources

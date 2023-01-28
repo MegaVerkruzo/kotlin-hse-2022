@@ -39,7 +39,7 @@ private fun StringBuilder.serializeValue(value: Any) = apply {
 }
 
 private fun StringBuilder.serializeString(value: String) = apply {
-    append('"').append(value.replace('\n', '\r')).append('"')
+    append('"').append(value).append('"')
 }
 
 

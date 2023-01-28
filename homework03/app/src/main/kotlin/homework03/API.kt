@@ -45,7 +45,7 @@ private suspend fun rec(
     result: MutableList<MyComment>,
     topicId: String,
     commentsInfoWrapper: CommentsInfoWrapper?,
-    prevId: Int = -1,
+    prevId: String = "",
     depth: Int = 0
 ) {
     if (commentsInfoWrapper == null) return
@@ -54,7 +54,7 @@ private suspend fun rec(
         result.add(
             MyComment(
                 id = comment.id ?: "-",
-                replyTo = prevId,
+                replyTo = prevId ?: "",
                 depth = depth,
                 timeCreate = comment.timeCreate,
                 countLikes = comment.countLikes,
@@ -64,7 +64,7 @@ private suspend fun rec(
                 topicId = topicId
             )
         )
-        rec(result, topicId, comment.replies, result.size - 1, depth + 1)
+        rec(result, topicId, comment.replies, comment.id ?: "", depth + 1)
     }
 }
 

@@ -33,7 +33,7 @@ class CommentsSnapshot {
 
 class MyComment(
     val id: String,
-    val replyTo: Int = -1,
+    val replyTo: String,
     val depth: Int,
     val timeCreate: Int,
     val countLikes: Int,
