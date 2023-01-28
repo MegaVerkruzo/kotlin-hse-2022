@@ -1,10 +1,8 @@
 package homework03
 
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import homework03.serializer.csvSerialize
 import java.io.File
 import java.io.IOException
 import java.net.URL
@@ -43,7 +41,7 @@ suspend fun getTopic(name: String): TopicSnapshot {
     return topicSnapshot
 }
 
-private fun rec(
+private suspend fun rec(
     result: MutableList<MyComment>,
     topicId: String,
     commentsInfoWrapper: CommentsInfoWrapper?,

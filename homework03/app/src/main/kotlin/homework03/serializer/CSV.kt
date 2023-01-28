@@ -65,9 +65,6 @@ private fun StringBuilder.serializeObject(value: Any) {
     val kClass = value.javaClass.kotlin
     val properties = kClass.memberProperties
 
-    println(kClass)
-    println(properties.first().get(value))
-    println(value.toString())
     when (kClass) {
         String::class -> {
             serializeString(value as String)
